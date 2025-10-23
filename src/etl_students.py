@@ -76,7 +76,7 @@ def clean_data():
 
 def load_mysql(df):
     """
-    Load processed data into MySQL database.
+    Load processed data into MySQL database or SQLite fallback.
     
     Args:
         df (pd.DataFrame): Processed dataframe to load
@@ -84,26 +84,38 @@ def load_mysql(df):
     try:
         eng = get_engine()
         
-        # Load data to MySQL
+        # Check if we're using SQLite (fallback) or MySQL
+        is_sqlite = 'sqlite' in str(eng.url)
+        
+        # Load data to database
         df.to_sql(
             "students", 
             eng, 
             if_exists="replace", 
             index=False, 
             chunksize=2000, 
-            method="multi"
+            method=None if is_sqlite else "multi"  # SQLite doesn't support 'multi'
         )
-        logger.info("Data loaded to MySQL table: students")
+        logger.info(f"Data loaded to {'SQLite' if is_sqlite else 'MySQL'} table: students")
         
-        # Add index for performance
-        with eng.connect() as conn:
-            try:
-                conn.execute(text("ALTER TABLE students ADD INDEX idx_final_result (final_result(10))"))
-                logger.info("✅ Index added to final_result column")
-            except Exception as e:
-                logger.warning(f"⚠️ Index may already exist: {e}")
+        # Add index for performance (MySQL only)
+        if not is_sqlite:
+            with eng.connect() as conn:
+                try:
+                    conn.execute(text("ALTER TABLE students ADD INDEX idx_final_result (final_result(10))"))
+                    logger.info("✅ Index added to final_result column")
+                except Exception as e:
+                    logger.warning(f"⚠️ Index may already exist: {e}")
+        else:
+            # For SQLite, create index differently
+            with eng.connect() as conn:
+                try:
+                    conn.execute(text("CREATE INDEX IF NOT EXISTS idx_final_result ON students(final_result)"))
+                    logger.info("✅ Index added to final_result column in SQLite")
+                except Exception as e:
+                    logger.warning(f"⚠️ SQLite index error: {e}")
         
-        logger.info("✅ Data successfully loaded to MySQL")
+        logger.info(f"✅ Data successfully loaded to {'SQLite' if is_sqlite else 'MySQL'}")
         
     except Exception as e:
         logger.error(f"❌ Error loading data to MySQL: {str(e)}")

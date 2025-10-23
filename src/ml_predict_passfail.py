@@ -18,7 +18,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # Constants
-DATA_DIR = "data"
+ROOT = os.path.join(os.path.dirname(__file__), "..")
+DATA_DIR = os.path.join(ROOT, "data")
 MODEL_FILE = os.path.join(DATA_DIR, "passfail_model.pkl")
 PROCESSED_FILE = os.path.join(DATA_DIR, "students_processed.csv")
 
