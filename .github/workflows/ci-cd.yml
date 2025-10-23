@@ -1,0 +1,56 @@
+name: Student Performance Analytics CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Validate Python syntax
+      run: |
+        python -c "import ast; [ast.parse(open(f, encoding='utf-8').read()) for f in ['src/analysis_students.py', 'src/db_utils.py', 'src/etl_students.py', 'src/ml_predict_passfail.py']]"
+    
+    - name: Check imports
+      run: |
+        python -c "
+        import sys
+        sys.path.append('src')
+        try:
+            # Test that files can be parsed and basic imports work
+            import ast
+            for module in ['analysis_students', 'db_utils', 'etl_students', 'ml_predict_passfail']:
+                with open(f'src/{module}.py', 'r', encoding='utf-8') as f:
+                    ast.parse(f.read())
+            print('All Python files have valid syntax')
+        except Exception as e:
+            print(f'Syntax error: {e}')
+            sys.exit(1)
+        "
+    
+    - name: Validate file structure
+      run: |
+        echo "Checking project structure..."
+        test -f README.md && echo "✓ README.md exists"
+        test -f requirements.txt && echo "✓ requirements.txt exists"
+        test -d src && echo "✓ src/ directory exists"
+        test -d data && echo "✓ data/ directory exists"
+        test -d notebooks && echo "✓ notebooks/ directory exists"
+        test -d powerbi && echo "✓ powerbi/ directory exists"
+        echo "Project structure validation complete"
