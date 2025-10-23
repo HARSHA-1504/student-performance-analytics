@@ -23,11 +23,11 @@ st.write("This dashboard analyzes student performance data in real-time using My
 # PORT="your_port"
 # DATABASE="your_database"
 
-HOST = st.secrets["HOST"]
-USER = st.secrets["USER"]
-PASSWORD = st.secrets["PASSWORD"]
-PORT = st.secrets["PORT"]
-DATABASE = st.secrets["DATABASE"]
+HOST = "yamanote.proxy.rlwy.net"
+USER = "root"
+PASSWORD = "LsMiNtwjVaLAAGqTeAPQkWviSleXbSXb"   # 🔹 Replace with real password from Railway
+PORT = "34460"
+DATABASE = "railway"
 
 # SQLAlchemy connection string
 connection_string = f"mysql+mysqlconnector://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}"
