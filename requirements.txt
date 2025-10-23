@@ -19,3 +19,5 @@ seaborn>=0.11.0
 
 # Jupyter Notebook Support
 jupyter>=1.0.0
+# Web Framework for Render Deployment
+flask>=2.2.0
