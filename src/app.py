@@ -53,13 +53,83 @@ passed = len(df[df["final_result"].str.lower() == "pass"])
 failures = len(df[df["final_result"].str.lower() == "fail"])
 pass_rate = round((passed / total_students) * 100, 2)
 
-# KPI Cards
+# ---------------------------
+# KPI SECTION (Styled)
+# ---------------------------
 st.markdown("---")
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("👩‍🎓 Total Students", total_students)
-col2.metric("✅ Passed", passed)
-col3.metric("❌ Failed", failures)
-col4.metric("📈 Pass Rate (%)", f"{pass_rate}%")
+st.markdown("### 📊 Key Performance Indicators")
+
+# Custom CSS for styling KPI boxes
+st.markdown(
+    """
+    <style>
+        .metric-container {
+            display: flex;
+            justify-content: space-around;
+            background-color: #f7f9fb;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+        .metric-box {
+            flex: 1;
+            text-align: center;
+            background: white;
+            padding: 20px;
+            margin: 0 10px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease-in-out;
+        }
+        .metric-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+        .metric-title {
+            font-size: 18px;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .metric-value {
+            font-size: 36px;
+            color: #0078ff;
+            font-weight: bold;
+        }
+        .pass { color: #16a34a; }
+        .fail { color: #dc2626; }
+        .rate { color: #9333ea; }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Display KPI cards
+st.markdown(
+    f"""
+    <div class="metric-container">
+        <div class="metric-box">
+            <div class="metric-title">👩‍🎓 Total Students</div>
+            <div class="metric-value">{total_students}</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-title">✅ Passed</div>
+            <div class="metric-value pass">{passed}</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-title">❌ Failed</div>
+            <div class="metric-value fail">{failures}</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-title">📈 Pass Rate (%)</div>
+            <div class="metric-value rate">{pass_rate}%</div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 
 # ---------------------------
 # VISUALIZATIONS
