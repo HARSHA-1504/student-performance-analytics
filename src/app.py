@@ -54,81 +54,86 @@ failures = len(df[df["final_result"].str.lower() == "fail"])
 pass_rate = round((passed / total_students) * 100, 2)
 
 # ---------------------------
-# KPI SECTION (Styled)
+# ---------------------------
+# KPI SECTION (Lavender Style)
 # ---------------------------
 st.markdown("---")
 st.markdown("### 📊 Key Performance Indicators")
 
-# Custom CSS for styling KPI boxes
+# Custom CSS for Lavender Cards
 st.markdown(
     """
     <style>
-        .metric-container {
+        .kpi-container {
             display: flex;
-            justify-content: space-around;
-            background-color: #f7f9fb;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            margin-bottom: 25px;
+            justify-content: space-evenly;
+            gap: 20px;
+            margin-top: 20px;
         }
-        .metric-box {
+        .kpi-card {
+            background-color: #d6c2ee; /* Lavender shade */
+            border-radius: 12px;
+            padding: 25px;
             flex: 1;
             text-align: center;
-            background: white;
-            padding: 20px;
-            margin: 0 10px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease-in-out;
+            color: #1a1a1a;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s;
         }
-        .metric-box:hover {
+        .kpi-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.15);
         }
-        .metric-title {
-            font-size: 18px;
-            color: #333;
+        .kpi-title {
+            font-size: 22px;
             font-weight: 600;
-            margin-bottom: 8px;
+            color: #2b2b2b;
+            margin-bottom: 10px;
         }
-        .metric-value {
-            font-size: 36px;
-            color: #0078ff;
+        .kpi-value {
+            font-size: 42px;
             font-weight: bold;
+            color: #000;
         }
-        .pass { color: #16a34a; }
-        .fail { color: #dc2626; }
-        .rate { color: #9333ea; }
+        .kpi-sub {
+            font-size: 14px;
+            color: #333333;
+            opacity: 0.8;
+        }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Display KPI cards
+# Render KPI cards
 st.markdown(
     f"""
-    <div class="metric-container">
-        <div class="metric-box">
-            <div class="metric-title">👩‍🎓 Total Students</div>
-            <div class="metric-value">{total_students}</div>
+    <div class="kpi-container">
+        <div class="kpi-card">
+            <div class="kpi-title">👩‍🎓 Total Students</div>
+            <div class="kpi-value">{total_students}</div>
+            <div class="kpi-sub">Sum of count</div>
         </div>
-        <div class="metric-box">
-            <div class="metric-title">✅ Passed</div>
-            <div class="metric-value pass">{passed}</div>
+        <div class="kpi-card">
+            <div class="kpi-title">✅ Total Passed</div>
+            <div class="kpi-value">{passed}</div>
+            <div class="kpi-sub">Total Passed</div>
         </div>
-        <div class="metric-box">
-            <div class="metric-title">❌ Failed</div>
-            <div class="metric-value fail">{failures}</div>
+        <div class="kpi-card">
+            <div class="kpi-title">❌ Failed</div>
+            <div class="kpi-value">{failures}</div>
+            <div class="kpi-sub">Total Failed</div>
         </div>
-        <div class="metric-box">
-            <div class="metric-title">📈 Pass Rate (%)</div>
-            <div class="metric-value rate">{pass_rate}%</div>
+        <div class="kpi-card">
+            <div class="kpi-title">📈 Pass Rate (%)</div>
+            <div class="kpi-value">{pass_rate}%</div>
+            <div class="kpi-sub">Success Percentage</div>
         </div>
     </div>
     """,
     unsafe_allow_html=True
 )
+
 
 
 # ---------------------------
